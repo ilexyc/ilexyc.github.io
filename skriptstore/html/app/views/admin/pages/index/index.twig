@@ -1,0 +1,128 @@
+{% extends "admin/pages/layout/layout.twig" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+
+            <h2 class="page-title">Статистика</h2>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="panel panel-default">
+                                <div class="panel-body bk-primary text-light">
+                                    <div class="stat-panel text-center">
+                                        <div class="stat-panel-number h1 ">{{ helper.getTodayDrops() }}</div>
+                                        <div class="stat-panel-title text-uppercase">Открыто кейсов сегодня</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="panel panel-default">
+                                <div class="panel-body bk-success text-light">
+                                    <div class="stat-panel text-center">
+                                        <div class="stat-panel-number h1 ">{{ helper.getTodayDeposits() }} <i class="fa fa-ruble"></i></div>
+                                        <div class="stat-panel-title text-uppercase">Введено сегодня</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="panel panel-default">
+                                <div class="panel-body bk-info text-light">
+                                    <div class="stat-panel text-center">
+                                        <div class="stat-panel-number h1 ">{{ helper.getTodayWithdraws() }} <i class="fa fa-ruble"></i></div>
+                                        <div class="stat-panel-title text-uppercase">Выведено сегодня</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="panel panel-default">
+                                <div class="panel-body bk-warning text-light">
+                                    <div class="stat-panel text-center">
+                                        <div class="stat-panel-number h1 ">{{ helper.budget() }} <i class="fa fa-ruble"></i></div>
+                                        <div class="stat-panel-title text-uppercase">Примерный профит</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+						<div class="col-md-3">
+                            <div class="panel panel-default">
+                                <div class="panel-body bk-primary text-light">
+                                    <div class="stat-panel text-center">
+                                        <div class="stat-panel-number h1 ">{{ helper.getAllUsers() }}</div>
+                                        <div class="stat-panel-title text-uppercase">Пользователей</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+						<div class="col-md-3">
+                            <div class="panel panel-default">
+                                <div class="panel-body bk-success text-light">
+                                    <div class="stat-panel text-center">
+                                        <div class="stat-panel-number h1 ">{{ helper.getAllDeposits() }} <i class="fa fa-ruble"></i></div>
+                                        <div class="stat-panel-title text-uppercase">Введено всего</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+						<div class="col-md-3">
+                            <div class="panel panel-default">
+                                <div class="panel-body bk-info text-light">
+                                    <div class="stat-panel text-center">
+                                        <div class="stat-panel-number h1 ">{{ helper.getAllWithdraws() }} <i class="fa fa-ruble"></i></div>
+                                        <div class="stat-panel-title text-uppercase">Выведено всего</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="panel panel-default">
+                                <div class="panel-body bk-warning text-light">
+                                    <div class="stat-panel text-center">
+                                        <div class="stat-panel-number h1 ">{{ helper.getTotalBalance() }} <i class="fa fa-ruble"></i></div>
+                                        <div class="stat-panel-title text-uppercase">Баланс всех пользователй</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Последние действия на сайте</div>
+        <div class="panel-body table-responsive">
+            <table id="zctb" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Пользователь</th>
+                    <th>Описание</th>
+                    <th>Сумма</th>
+                    <th>Время</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for element in history %}
+                    <tr {% if element.cost < 0 %} class="danger" {% else %} class="success" {% endif %}>
+                        <td>{{ element.id }}</td>
+                        <td><a href="/profile/{{ element.user_id }}" target="_blank">{{ helper.getUserInfo(element.user_id).name }}</a> / <a href="https://vk.com/id{{ helper.getUserInfo(element.user_id).uid }}" target="_blank">VK</a></td>
+                        <td>{{ element.description }}</td>
+                        <td>{{ element.cost }}</td>
+                        <td>{{ helper.unixToString('%d %b %Y, %H:%M', element.time) }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+{% endblock %}

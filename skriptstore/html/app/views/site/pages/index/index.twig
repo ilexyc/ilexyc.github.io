@@ -1,0 +1,114 @@
+{% extends "site/pages/layout/layout.twig" %}
+
+{% block content %}
+    <div class="cls"></div>
+    <div class="cls"></div>
+    <div class="cases">
+        <div class="cls"></div>
+		<div class="contest-home">
+<div class="img"><img src="/templates/site/dist/img/cases/spec6.png" alt="Розыгрыш PS4 SLIM!"></div>
+<div class="desc">
+<h3><a href="https://vk.com/funcash_ru" target="_blank">Розыгрыш PS4 SLIM 500GB!</a></h3>
+Ура! Сделай РЕПОСТ ВКонтакте и выиграй PS4 SLIM и кучу призов! Топ конкурс уже стартовал!&nbsp;Пропробуй и ты!
+</div>
+<a href="https://vk.com/funcash_ru" target="_blank" class="btn join rounded">Подробнее</a>
+<div class="cls"></div>
+</div>
+<h3>Билетные кейсы</h3>
+<ul class="ticket-boxes">
+{% for ticket in tickets %}
+<li class="ticket-box">
+<span class="ticket-box-inner">
+<span class="new">НОВОЕ!</span>
+<span class="left">
+<a href="/ticket/{{ticket.id}}" class="tit">{{ticket.name}}</a><br>
+<span class="price">Стоимость: {{ticket.price}}р</span>
+<a href="/ticket/{{ticket.id}}" class="btn rounded">Подробнее</a>
+</span>
+<span class="right">
+<span class="jackpot"><span class="small">Джекпот</span>{{ticket.winsum}}</span>
+</span>
+<span class="cls"></span>
+</span>
+</li>
+{% endfor %}
+</ul>
+<h3>Кейсы</h3>
+        {% for case in cases %}
+            <div class="case-grid" data-case-pricef="{% if case.price <= 100 %}10{% elseif case.price <= 1000 %}100{% elseif case.price <= 10000 %}1000{% else %}9999999{% endif %}" data-case-pricet="{% if case.price <= 100 %}100{% elseif case.price <= 1000 %}1000{% elseif case.price <= 10000 %}10000{% else %}9999999{% endif %}" data-case-status="1" data-case-type="{{ case.type }}">
+                <div class="case {% if case.type == 2 %} case-mixed {% endif %}">
+                    <a href="/case/{{ case.id }}" class="mobile-url">{{ case.name }}</a>
+
+                    <div class="hover eas">
+                        <div class="light"><a href="/case/{{ case.id }}" class="btn orange rounded eas">{{ case.name }}</a>
+                        </div>
+                    </div>
+
+                    {% if case.discount %}
+                        <div class="price">
+                            <b>стоимость</b><s>{{ case.price }} <span class="flaticon-ruble"></span></s> {{ case.price - case.discount }} <span class="flaticon-ruble"></span>
+                        </div>
+                    {% else %}
+                        <div class="price">
+                            <b>стоимость</b>{{ case.price }} <span class="flaticon-ruble"></span>
+                        </div>
+                    {% endif %}
+
+                    <div class="img">
+                        <div class="prize"><img src="{{ case.image }}" alt="Призовая обложка"></div>
+                        <div class="cover"><img src="{{ case.background_image }}" alt="Призовая обложка"></div>
+                    </div>
+
+                    <div class="payed">
+                        {% if case.type == 2 %}
+                            <div class="left">+ {{ helper.getDigitalItemInfo(case.id).name }} {{ helper.getDigitalItemInfo(case.id).cost }}р</div>
+                        {% elseif case.type == 3 %}
+                            <div class="left type-3">+ {{ helper.getDigitalItemInfo(case.id).name }}</div>
+                        {% endif %}
+
+                        <div  class="right" >выдано {{ helper.getBankCase(case.id) }}<span class="flaticon-ruble ruble-small"></span></div>
+
+                        <div class="cls"></div>
+                    </div>
+
+                    <div class="case-footer">
+                        <a href="/case/{{ case.id }}">Содержит от <b>{{ helper.getMinMaxCase(case.id).min }}<span class="flaticon-ruble ruble-small"></span></b> до <b>{{ helper.getMinMaxCase(case.id).max }}<span class="flaticon-ruble ruble-small"></span></b></a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="infobox case-empty">
+        <h3><span class='flaticon-cry'></span> Ой ой ой..</h3>По данным параметрам ничего не найдено<br>Хотите
+        предложить новый формат кейса? <a href='/pages/support/'>Напишите нам</a>!
+    </div>
+
+    <div class="cls"></div>
+<div style="display:none;"><script type="text/javascript">
+document.write("<a href='//www.liveinternet.ru/click' "+ 
+"target=_blank><img src='//counter.yadro.ru/hit?t11.6;r"+ 
+escape(document.referrer)+((typeof(screen)=="undefined")?"": 
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth? 
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+ 
+";"+Math.random()+ 
+"' alt='' title='LiveInternet: показано число просмотров за 24"+ 
+" часа, посетителей за 24 часа и за сегодня' "+ 
+"border='0' width='88' height='31'><\/a>") 
+</script></div>
+{% if user %}
+                {% else %}
+<div id="seo">
+<center><h1>Кейсы с деньгами</h1>
+<a href="www.funcash.ru">FUNCASH.RU</a> - Сервис для веселого заработка денег. На нашем проекте Вы имеете отличные шансы подзаработать! </br> 
+Никто не гарантирует 100% шанс, но вероятность победы достаточно велика. </br>
+А так же, Вы можете заработать с приглашения своих друзей. Для этого авторизуйтесь и ознакомтесь с разделом партнерская программа в <a href="http://funcash.ru/account/">личном кабинете</a>. </br>
+</br><h2>Пора испытать удачу! Желаем веселых побед!</h2></center>
+</div>
+
+                {% endif %}
+    {% if top|length < 3 %}
+        <div class="seperator"></div>
+    {% endif %}
+
+{% endblock %}

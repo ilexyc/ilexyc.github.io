@@ -1,0 +1,55 @@
+{% extends "site/pages/layout/layout.twig" %}
+
+{% block content %}
+
+<div class="inner"><h1 class="tickets-h1">{{ ticket.name }}</h1>
+<div class="tickets-round"><span>Раунд: {{ ticket.round }}</span></div><div class="tickets-info">
+<div class="t1"><span>Стоимость:</span><br><b>{{ ticket.price }}p.</b></div>
+<div class="t2"><span>Джекпот:</span><br><b>{{ ticket.winsum }}p.</b></div>
+<div class="t3">Выберите свободное место, которые хотите занять. Вы можете занять неограниченное количество мест. После выдачи всех билетов один из участников выиграет джекпот. Удачи!</div>
+<div class="cls"></div>
+</div><script>
+var ticket_price = 30;
+</script><div class="tickets-loader">
+<div class="text">{{placesnow}}/{{ticket.places}}</div>
+<div class="complete" style="width:{{100 / ticket.places * placesnow}}%"></div>
+</div><div class="cls"></div><div class="tickets-places">
+  {% for i in 1..ticket.places %}
+  {% if places[i] %}
+  <div class="one-place" id="game-place-{{i}}">
+<a href="/profile/{{places[i]['user']}}" target="_blank"><img src="{{ helper.getUserInfo(places[i]['user']).photo }}"></a>
+</div>
+  {% else %}
+<div class="one-place eas-fast" id="game-place-{{i}}" onclick="Functions.SetPlace({{ ticket.id }},{{ ticket.round }}, {{i}}, {{ user.id }});">
+<span>{{i}}<span>
+</div>
+{% endif %}
+   {% endfor %}
+<div class="cls"></div>
+<h3>Последний победитель</h3>
+<div class="daily-winner">
+<div class="daily-winner-in">
+<div class="b1">
+<a href="/profile/{{ticket.winner_id}}"><img src="{{ helper.getUserInfo(ticket.winner_id).photo }}" alt="{{ helper.getUserInfo(ticket.winner_id).name }}"></a>
+</div>
+<div class="b2">
+<a href="/profile/{{ticket.winner_id}}">{{ helper.getUserInfo(ticket.winner_id).name }}</a><br>
+<div class="tickets-round"><span>Победный билет: {{ticket.winner_ticket}}</span></div>
+</div>
+<div class="b3"><div class="tickets-round"><span style=" margin-top: 45px;">Раунд: {{ticket.round-1}}</span></div></div>
+<div class="cls"></div>
+</div>
+<div class="daily-winner-animation"></div>
+</div>
+</div><h3 class="tickets-h3">Недавние участники</h3>
+<div class="tickets-bets">
+{% for i in 1..ticket.places %}
+{% if places[i] %}
+<div class="ticket-bet">
+<span class="date">{{ helper.unixToString('%d %b %Y, %H:%M', places[i]['time']) }}</span> <a href="/profile/{{places[i]['user']}}" target="_blank">{{ helper.getUserInfo(places[i]['user']).name }}</a> занял место <span class="ticket">#{{places[i]['place']}}</span>
+</div>
+{% endif %}
+{% endfor %}
+</div><div class="seperator"></div></div>
+	
+{% endblock %}

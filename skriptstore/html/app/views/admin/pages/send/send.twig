@@ -1,0 +1,56 @@
+{% extends "admin/pages/layout/layout.twig" %}
+
+{% block content %}
+    <div class="row">
+    <div class="col-md-12">
+
+    <h2 class="page-title">Вещи для отправки</h2>
+
+    <div class="alert alert-success" style="display: none">
+        <strong>Успешно!</strong> Indicates a successful or positive action.
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Таблица вещей</div>
+        <div class="panel-body">
+            <table id="zctb" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Пользователь</th>
+                    <th>Имя получателя</th>
+                    <th>Телефон</th>
+                    <th>Почта</th>
+                    <th>Адрес</th>
+                    <th>Изображение гифта</th>
+                    <th>Название гифта</th>
+                    <th>Код</th>
+                    <th>Статус</th>
+                    <th>Дата</th>
+                    <th>Действие</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for element in send %}
+                    <tr {% if not element.gift_code %} class="element-{{ element.id }} danger" {% else %} class="element-{{ element.id }} success" {% endif %}>
+                        <td>{{ element.id }}</td>
+                        <td><a href="/profile/{{ element.user_id }}" target="_blank">{{ helper.getUserInfo(element.user_id).name }}</a> / <a href="https://vk.com/id{{ helper.getUserInfo(element.user_id).uid }}" target="_blank">VK</a></td>
+                        <td>{% if element.name %} {{ element.name }} {% else %} Предмет продан {% endif %}</td>
+                        <td>{% if element.telephone %} {{ element.telephone }} {% else %} Продан {% endif %}</td>
+                        <td>{{ element.email }}</td>
+                        <td>{% if element.address %} {{ element.address }} {% else %} Предмет продан {% endif %}</td>
+                        <td><img src="{{ element.gift_image }}" style="width: 50px;"></td>
+                        <td>{{ element.gift_name }}</td>
+                        <td>{% if element.gift_code %} {{ element.gift_code }} {% else %} Предмет продан {% endif %}</td>
+                        <td><input type="text" class="form-control" id="status" value="{{ element.status }}"></td>
+                        <td>{{ helper.unixToString('%d %b %Y, %H:%I', element.time) }}</td>
+                        <td><button type="button" class="btn btn-danger" onclick="Functions.DeleteDigital({{ digital.id }})">Удалить</button></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+{% endblock %}

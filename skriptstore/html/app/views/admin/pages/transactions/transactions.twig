@@ -1,0 +1,42 @@
+{% extends "admin/pages/layout/layout.twig" %}
+
+{% block content %}
+    <div class="row">
+    <div class="col-md-12">
+
+    <h2 class="page-title">Транзакции</h2>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Транзакции на сайте</div>
+        <div class="panel-body table-responsive">
+            <table id="zctb" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Пользователь</th>
+                    <th>Сервис</th>
+                    <th>Сумма</th>
+                    <th>Описание</th>
+                    <th>Статус</th>
+                    <th>Время</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for transaction in transactions %}
+                    <tr {% if transaction.cost < 0 %} class="danger" {% else %} class="success" {% endif %}>
+                        <td>{{ transaction.id }}</td>
+                        <td><a href="/profile/{{ transaction.user_id }}" target="_blank">{{ helper.getUserInfo(transaction.user_id).name }}</a> / <a href="https://vk.com/id{{ helper.getUserInfo(transaction.user_id).uid }}" target="_blank">VK</a></td>
+                        <td>{% if transaction.service == 1 %} InterKassa {% endif %}</td>
+                        <td>{{ transaction.cost }} <i class="fa fa-ruble"></i></td>
+                        <td>{{ transaction.description }}</td>
+                        <td>{% if transaction.status == 1 %} Завершён успешно {% endif %}</td>
+                        <td>{{ helper.unixToString('%d %b %Y, %H:%I', transaction.time) }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+{% endblock %}

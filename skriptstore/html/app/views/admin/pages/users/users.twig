@@ -1,0 +1,72 @@
+{% extends "admin/pages/layout/layout.twig" %}
+
+{% block content %}
+    <div class="row">
+    <div class="col-md-12">
+
+    <h2 class="page-title">Пользователи</h2>
+
+    <div class="alert alert-success" style="display: none">
+        <strong>Успешно!</strong> Indicates a successful or positive action.
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Таблица пользователей</div>
+        <div class="panel-body table-responsive">
+            <table id="zctb" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Имя</th>
+                    <th>Фото</th>
+                    <th>Пол</th>
+                    <th>Администратор</th>
+                    <th>Дата рождения</th>
+                    <th>Почта</th>
+                    <th>Баланс</th>
+                    <th>Реферал</th>
+                    <th>Реферальный код</th>
+                    <th>Действие</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    <tr class="user-{{ user.id }}">
+                        <td>{{ user.id }}</td>
+                        <td><a href="/profile/{{ user.id }}" target="_blank">{{ user.name }}</a> / <a href="https://vk.com/id{{ user.uid }}" target="_blank">VK</a></td>
+                        <td><img src="{{ user.photo }}" style="width: 50px;"></td>
+                        <td>{% if user.sex == 1 %} Женский {% else %} Мужской {% endif %}</td>
+                        <td>
+                            <div style="display: none">{{ user.admin }}</div>
+
+                            <select class="form-control" onchange="Functions.UpdateUserRole({{ user.id }}, this.value)">
+                                <option value="1" {% if user.admin == 1 %} selected {% endif %}>Да</option>
+                                <option value="0" {% if user.admin == 0 %} selected {% endif %}>Нет</option>
+                            </select>
+                        </td>
+                        <td>{{ user.date }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+
+                            <div style="display: none">{{ user.balance }}</div>
+
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="balance" value="{{ user.balance }}" onchange="Functions.UpdateUserBalance({{ user.id }}, this.value)">
+                                <span class="input-group-addon" id="basic-addon1"><i class="fa fa-ruble"></i></span>
+                            </div>
+                        </td>
+                        <td>{% if user.referral %} {{ user.referral }} {% else %} Не вводил код {% endif %}</td>
+                        <td>
+                            <div style="display: none">{{ user.referral_code }}</div>
+                            <input type="text" class="form-control" id="balance" value="{{ user.referral_code }}" onchange="Functions.UpdateUserReferralCode({{ user.id }}, this.value)">
+                        </td>
+                        <td><button type="button" class="btn btn-danger" onclick="Functions.DeleteUser({{ user.id }})">Удалить</button></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+{% endblock %}

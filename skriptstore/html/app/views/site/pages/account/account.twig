@@ -1,0 +1,246 @@
+{% extends "site/pages/layout/layout.twig" %}
+
+{% block content %}
+    <div class="account">
+
+        <div class="userbox">
+            <div class="l">
+                <a href="/auth/logout/" class="logout">Выйти</a>
+                <img src="{{ user.photo }}" alt="{{ user.name }}">
+                <h1>{{ user.name }} <a href="https://vk.com/id{{ user.uid }}" target="_blank"> <span class="flaticon-soc-vk"></span> </a> </h1>
+                <div class="u-cases"><span class="flaticon-case"></span> Кейсы: <span class="n">{{ drops|length }}</span></div>
+                <div class="u-money"><span class="flaticon-money"></span> Выигрыш: <span class="n">{{ helper.getUserBank(user.id) }}р</span></div>
+                <div class="u-balance"><span class="flaticon-ruble"></span> Баланс: <span class="n"><b id="u-balance-field">{{ user.balance }}</b>р</span></div>
+            </div>
+            <div class="r">  
+                <a href="#deposit" onclick="Functions.PopupOpen('#deposit');return false;" class="btn yellow">Пополнить баланс</a>
+                <a href="#withdrawal" class="btn darkblue" onclick="Functions.PopupOpen('#withdrawal');return false;">Вывод средств</a>
+            </div>
+            <div class="cls"></div>
+        </div>
+
+        <div class="referral">
+
+            <div class="b1">
+                <h3>
+                    <span class="flaticon-users"></span> Пригласи друзей и заработай больше!
+                </h3>
+                <div class="desc">Отправь свой уникальный код друзьям<br> и <span>получи 10%</span> от каждого пополнения баланса другом!</div>
+                <div class="field">
+                    <input type="text" class="inp" value="{{ user.referral_code }}" readonly="readonly" onclick="select();">
+                </div>
+                <div class="short">По вашему коду зарегистрировались: {{ helper.getUsersReferrals(user.referral_code) }}</div>
+            </div>
+
+            <div class="b2">
+
+                <div class="loader" id="redeem-loader">
+                    <img src="/templates/site/dist/img/loader.svg" alt="">
+                </div>
+
+                <h3>
+                    <span class="flaticon-money"></span> Введи код и получи 10р!
+                </h3>
+
+                <div class="desc">У вас есть партнерский код?<br> Введите его в поле и <span>получите 10 рублей</span> прямо сейчас!</div>
+
+                {% if user.referral %}
+                    <div class="field">
+                        <input type="text" class="inp" value="{{ user.referral }}" disabled="disabled">
+                    </div>
+                {% else %}
+                    <div class="field">
+                        <input type="text" class="inp redeem-input">
+                        <input type="button" class="btn" value="OK" onclick="Functions.RedeemCode($('.redeem-input'), this, '#redeem-loader');">
+                    </div>
+                {% endif %}
+
+                {% if user.referral %}
+                    <div class="short">
+                        <span class="flaticon-check"></span> Код успешно погашен!
+                    </div>
+                {% else %}
+                    <div class="short">Введите код и нажмите enter</div>
+                {% endif %}
+            </div>
+            <div class="cls"></div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab tab-1 eas active" data-tab-id="1">Призы</div>
+            <div class="tab tab-2 eas" data-tab-id="2">История</div>
+            <div class="tab tab-3 eas" data-tab-id="3">Финансы</div>
+            <div class="tab tab-4 eas" data-tab-id="4">Доставка</div>
+        </div>
+
+        <div class="tab-container tab-container-1 active">
+            <div class="cls"></div>
+            {% if drops|length > 0 %}
+                <div class="history-cases">
+                    {% for drop in drops %}
+                        <div class="history-case" id="history-case-{{ drop.id }}">
+
+                            <div class="status">
+                                {% if helper.getItemInfo(drop.item_id).digital and not helper.getSendItem(drop.id) %}
+                                    <span class="flaticon-wait"></span>
+                                {% else %}
+                                    <span class="flaticon-check"></span>
+                                {% endif %}
+                            </div>
+
+                            <div class="coin silver">
+                                <img src="{{ helper.getItemInfo(drop.item_id).image }}"
+                                     alt="{{ helper.getItemInfo(drop.item_id).name }}">
+                            </div>
+
+                            <div class="loader">
+                                <img src="/templates/site/dist/img/loader.svg" alt="">
+                            </div>
+
+                            {% if helper.getItemInfo(drop.item_id).digital and not helper.getSendItem(drop.id) %}
+                                <div class="button" onclick="Functions.GetGift({{ drop.id }}, '{{ helper.getItemInfo(drop.item_id).name }}', {{ helper.getItemInfo(drop.item_id).cost }})">
+                                    <div class="btn">Получить</div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <div class="gift-shipping" id="gift-shipping">
+                        <div class="in">
+                            <form name="gift-shipping-form">
+                                <span class="flaticon-close close" onclick="$('#gift-shipping').fadeOut(100);"></span>
+                                <div class="loader">
+                                    <img src="/templates/site/dist/img/loader.svg" alt="">
+                                </div>
+                                <div class="line">ФИО*</div>
+                                <div class="input"><input type="text" id="name" class="inp" value="{{ user.name }}"></div>
+                                <div class="cls"></div>
+                                <div class="line">Телефон*</div>
+                                <div class="input"><input type="text" id="telephone" class="inp"></div>
+                                <div class="cls"></div>
+                                <div class="line">E-mail*</div>
+                                <div class="input"><input type="text" id="email" class="inp" value="{{ user.email }}"></div>
+                                <div class="cls"></div>
+                                <div class="line">Полный адрес доставки</div>
+                                <div class="input"><textarea class="textarea" id="address" placeholder="Пример: Россия, Москва, улица Берозово 12, кв. 48"></textarea></div>
+                                <div class="cls"></div><div class="button"><input type="button" class="btn rounded" value="Отправить" onclick="Functions.ShipGift('gift-shipping-form');"></div>
+                                <div class="cls"></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="infobox text-center">
+                    <br>
+                    <h3>
+                        <center>Вы не открывали кейсов :(</center>
+                    </h3>
+                    <a href="/" class="btn rounded blue">Открыть и выиграть</a>
+                    <br>
+                    <br>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="tab-container tab-container-2">
+            {% if history|length > 0 %}
+                <table class="table history-money">
+                    <thead>
+                    <tr>
+                        <td width="50">№</td>
+                        <td>Описание</td>
+                        <td width="150" class="text-center">Сумма</td>
+                        <td width="150" class="text-center">Дата</td>
+                        <td width="80" class="text-center">Статус</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for element in history %}
+                        <tr>
+                            <td>{{ element.id }}</td>
+                            <td>{{ element.description }}</td>
+                            <td class="amount {% if element.cost < 0 %} negative {% endif %} text-center">{% if element.cost > 0 %}+{% endif %}{{ element.cost }}<span class="flaticon-ruble text-11 text-normal"></span></td>
+                            <td class="text-center">{{ helper.unixToString('%d %b %Y, %H:%I', element.time) }}</td>
+                            <td class="text-center">
+                                <span class="flaticon-check"></span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="infobox">
+                    <div class="text-center">Скоро тут будут ваши миллиарды ;)</div>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="tab-container tab-container-3">
+            {% if transactions|length > 0 %}
+                <table class="table history-money">
+                    <thead>
+                    <tr>
+                        <td width="50">№</td>
+                        <td>Описание</td>
+                        <td width="150" class="text-center">Сумма</td>
+                        <td width="150" class="text-center">Дата</td>
+                        <td width="80" class="text-center">Статус</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for transaction in transactions %}
+                        <tr>
+                            <td>{{ transaction.id }}</td>
+                            <td>{{ transaction.description }}</td>
+                            <td class="amount {% if transaction.cost < 0 %} negative {% endif %} text-center">{% if transaction.cost > 0 %}+{% endif %}{{ transaction.cost }}<span class="flaticon-ruble text-11 text-normal"></span></td>
+                            <td class="text-center">{{ helper.unixToString('%d %b %Y, %H:%I', transaction.time) }}</td>
+                            <td class="text-center">
+                                {% if transaction.status == 1 %}
+                                    <span class="flaticon-check"></span>
+                                {% elseif transaction.status == 0 %}
+                                    <span class="flaticon-wait"></span>
+                                {% elseif transaction.status == 2 %}
+                                    <span class="flaticon-close"></span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="infobox">
+                    <div class="text-center">Скоро тут будут ваши миллиарды ;)</div>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="tab-container tab-container-4">
+            <div id="history-shipping">
+                {% if send|length > 0 %}
+                    <table class="table history-money">
+                        {% for element in send %}
+                            {% if element.telephone and element.address %}
+                                <tr>
+                                    <td width="50">{{ element.id }}</td>
+                                    <td class="gift-shipping-photo" width="200"><img
+                                                src="{{ element.gift_image }}"><br>{{ element.gift_name }}</td>
+                                    <td class="gift-shipping-row"><b>{{ element.name }}</b><br>{{ element.address }}
+                                        <br>{{ element.telephone }}, {{ element.email }}</td>
+                                    <td width="150"
+                                        class="text-center">{{ helper.unixToString('%d %b %Y, %H:%I', element.time) }}</td>
+                                    <td width="80" class="text-center">{{ element.status }}</td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </table>
+                {% else %}
+                    <div class="text-center">У вас нет призов в доставке</div>
+                {% endif %}
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="seperator"></div>
+{% endblock %}

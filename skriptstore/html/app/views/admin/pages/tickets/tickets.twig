@@ -1,0 +1,144 @@
+{% extends "admin/pages/layout/layout.twig" %}
+
+{% block content %}
+    <div class="row">
+    <div class="col-md-12">
+
+    <h2 class="page-title">Билеты</h2>
+
+    <div class="alert alert-success" style="display: none">
+        <strong>Успешно!</strong> Indicates a successful or positive action.
+    </div>
+
+    <button type="button" class="btn btn-primary" style="margin-bottom: 20px;" data-toggle="modal" data-target="#addCase">Добавить билет</button>
+
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Таблица кейсов</div>
+        <div class="panel-body table-responsive">
+            <table id="zctb" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>ID</th>
+					<th>Раунд</th>
+                    <th>Название</th>
+                    <th>Стоймость</th>
+                    <th>Кол-во билетов</th>
+                    <th>Выигрыш</th>
+                    <th>Действие</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for ticket in tickets %}
+                    <tr class="case-{{ ticket.id }}">
+                        <td>{{ ticket.id }}</td>
+                        <td><div style="display: none">{{ ticket.round }}</div><input type="text" class="form-control" id="ticket" value="{{ ticket.round }}" onchange="Functions.UpdateTicketRound({{ ticket.id }}, this.value)"></td>
+                        <td><div style="display: none">{{ ticket.name }}</div><input type="text" class="form-control" id="name" value="{{ ticket.name }}" onchange="Functions.UpdateTicketName({{ ticket.id }}, this.value)"></td>
+                        <td>
+                            <div style="display: none">{{ ticket.price }}</div>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="price" value="{{ ticket.price }}" onchange="Functions.UpdateTicketPrice({{ ticket.id }}, this.value)">
+                                <span class="input-group-addon" id="basic-addon1"><i class="fa fa-ruble"></i></span>
+                            </div>
+                        </td>
+                        <td>
+                            <div style="display: none">{{ ticket.places }}</div>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="places" value="{{ ticket.places }}" onchange="Functions.UpdateTicketPlaces({{ ticket.id }}, this.value)">
+                                <span class="input-group-addon" id="basic-addon1"><i class="fa fa-ruble"></i></span>
+                            </div>
+                        </td>
+                        <td>
+                            <div style="display: none">{{ ticket.winsum }}</div>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="winsum" value="{{ ticket.winsum }}" onchange="Functions.UpdateTicketWinsum({{ ticket.id }}, this.value)">
+                                <span class="input-group-addon" id="basic-addon1"><i class="fa fa-percent"></i></span>
+                            </div>
+                        </td>
+                        <td><button type="button" class="btn btn-danger" onclick="Functions.DeleteTicket({{ ticket.id }})">Удалить</button></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+
+    <!-- Modal Add Item -->
+    <div class="modal fade" id="addCase" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Добавление билета</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="name">Название</label>
+                        <input type="text" class="form-control" id="name">
+                    </div>
+
+    
+
+                    <div class="form-group">
+                        <label for="image">Стоймость</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="price">
+                            <span class="input-group-addon"> <i class="fa fa-ruble"></i></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image">Выигрыш</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="winsum">
+                            <span class="input-group-addon"> <i class="fa fa-ruble"></i></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image">Кол-во билетов</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="places">
+                            <span class="input-group-addon"> <i class="fa fa-percent"></i></span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary" onclick="Functions.AddTicket()">Добавить билет</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Add Image -->
+    <div class="modal fade" id="addImage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Добавление картинки</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="center-block" style="width:200px">
+                            <form action="/api/uploadFile" method="post" enctype="multipart/form-data">
+                                <input type="file" name="filename"><br>
+                                <input type="submit" value="Загрузить" class="center-block"/>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

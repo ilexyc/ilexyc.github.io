@@ -1,0 +1,45 @@
+{% extends "site/pages/layout/layout.twig" %}
+
+{% block content %}
+    <div class="account">
+
+        <div class="userbox">
+            <div class="l">
+                <img src="{{ profile.photo }}" alt="{{ profile.name }}">
+                <h1>{{ profile.name }} <a href="https://vk.com/id{{ profile.uid }}" target="_blank"> <span class="flaticon-soc-vk"></span> </a> </h1>
+                <div class="u-cases"><span class="flaticon-case"></span> Кейсы: <span class="n">{{ drops|length }}</span></div>
+                <div class="u-money"><span class="flaticon-money"></span> Выигрыш: <span class="n">{{ helper.getUserBank(profile.id) }}р</span></div>
+            </div>
+            <div class="r">
+                <a href="/" class="btn darkblue"><span class="flaticon-arrow-left"></span> назад к кейсам</a>
+            </div>
+            <div class="cls"></div>
+        </div>
+
+        <div class="seperator"></div>
+
+        <h3>Последние 30 призов</h3>
+
+        <div class="cls"></div>
+
+        <div class="history-cases">
+            <div class="cls"></div>
+            {% if drops|length > 0 %}
+                {% for drop in drops %}
+                    <div class="history-case">
+                        <a href="/case/{{ drop.case_id }}" class="eas case-url">Кейс №{{ drop.case_id }}</a>
+                        <div class="status"><span class="flaticon-check"></span></div>
+                        <div class="coin silver">
+                            <img src="{{ helper.getItemInfo(drop.item_id).image }}" alt="{{ helper.getItemInfo(drop.item_id).name }}">
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                История игр пуста
+            {% endif %}
+            <div class="cls"></div>
+        </div>
+    </div>
+
+    <div class="seperator"></div>
+{% endblock %}

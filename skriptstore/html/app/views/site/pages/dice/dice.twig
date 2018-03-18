@@ -1,0 +1,164 @@
+{% extends "site/pages/layout/layout.twig" %}
+
+{% block content %}
+<div class="dice" style="background: rgba(20, 24, 39, 0.58);height: 410px;">
+            <div id="roll-wrap" style="height: 170px;perspective: 800;top: -9px;perspective-origin: 50% 200px;">
+                <div id="dice" style="transform: rotateX(40deg) rotateY(40deg);position: absolute;margin: auto;height: 100px;top: 80px;left: 640px;width: 100px;transition: transform 500ms linear;transform-style: preserve-3d;" data-rotatex="40" data-rotatey="40">
+                    <div class="sf f1 inner1"></div>
+                    <div class="sf f2 inner1"></div>
+                    <div class="sf f3 inner1"></div>
+                    <div class="sf f4 inner1"></div>
+                    <div class="sf f5 inner1"></div>
+                    <div class="sf f6 inner1"></div>
+
+                    <div class="sf f1">
+                        <div class="dot center"></div>
+                    </div>
+                    <div class="sf f2">
+                        <div class="dot dtop dleft"></div>
+                        <div class="dot dbottom dright"></div>
+                    </div>
+                    <div class="sf f3">
+                        <div class="dot dtop dleft"></div>
+                        <div class="dot center"></div>
+                        <div class="dot dbottom dright"></div>
+                    </div>
+                    <div class="sf f4">
+                        <div class="dot dtop dleft"></div>
+                        <div class="dot dtop dright"></div>
+                        <div class="dot dbottom dleft"></div>
+                        <div class="dot dbottom dright"></div>
+                    </div>
+                    <div class="sf f5">
+                        <div class="dot center"></div>
+                        <div class="dot dtop dleft"></div>
+                        <div class="dot dtop dright"></div>
+                        <div class="dot dbottom dleft"></div>
+                        <div class="dot dbottom dright"></div>
+                    </div>
+                    <div class="sf f6">
+                        <div class="dot dtop dleft"></div>
+                        <div class="dot dtop dright"></div>
+                        <div class="dot dbottom dleft"></div>
+                        <div class="dot dbottom dright"></div>
+                        <div class="dot center dleft"></div>
+                        <div class="dot center dright"></div>
+                    </div>
+
+                    <div class="sf cover x"></div>
+                    <div class="sf cover y"></div>
+                    <div class="sf cover z"></div>
+                </div>
+            </div>
+            <div class="controls" style="padding-left: 26px;margin-top: -129px;float: left;width: 531px;">
+                <input type="text" class="amount" value="" style="
+    float: left;
+" placeholder="Ставка" id="betAmount">
+                <div class="buttons">
+                    <div class="balance-button" style="float: left; margin-left:4px" data-action="clear">Очистить</div>
+                    <div class="balance-button" style="float: left; margin-left:4px" data-action="min">Мин</div>
+                    <div class="balance-button" style="float: left; margin-left:4px" data-action="+1">+1</div>
+                    <div class="balance-button" style="float: left; margin-left:4px" data-action="+10">+10</div>
+                    <div class="balance-button" style="float: left; margin-left:4px" data-action="+100">+100</div>
+                    <div class="balance-button" style="float: left; margin-left:4px" data-action="1/2">1/2</div>
+                    <div class="balance-button" style="float: left; margin-left:4px" data-action="x2">x2</div>
+                    <div class="balance-button" style="float: left; margin-left:4px" data-action="max">Макс</div>
+                </div>
+            </div>
+            <div class="play-area">
+                <div class="dice-colors">
+                    <div class="dice-color red">
+                        <div class="color-header">
+                            <div class="header-info">
+                                <button class="header-button red" data-value="1" onclick="Functions.BetDice(1);">1</button>
+                            </div>
+                        </div>
+                        <div class="dice-your-bet">
+                            <div><div class="title"></div><span class="my-bet-red my-bet">x6</span></div>
+                        </div>
+                        
+                    </div>
+                    <div class="dice-color green">
+                        <div class="color-header">
+                            <div class="header-info">
+                                <button class="header-button green" data-value="2" onclick="Functions.BetDice(2);">2</button>
+                            </div>
+                        </div>
+                        <div class="dice-your-bet">
+                            <div><div class="title"></div><span class="my-bet-red my-bet">x6</span></div>
+                        </div>
+                        
+                    </div>
+                    <div class="dice-color black">
+                        <div class="color-header">
+                            <div class="header-info">
+                                <button class="header-button black" data-value="3" onclick="Functions.BetDice(3);">3</button>
+                            </div>
+                        </div>
+                        <div class="dice-your-bet">
+                            <div><div class="title"></div><span class="my-bet-red my-bet">x6</span></div>
+                        </div>
+                        
+                    </div>
+                    <div class="dice-color black">
+                        <div class="color-header">
+                            <div class="header-info">
+<button class="header-button black" data-value="4" onclick="Functions.BetDice(4);">4</button>
+                            </div>
+                        </div>
+                        <div class="dice-your-bet">
+                            <div><div class="title"></div><span class="my-bet-red my-bet">x6</span></div>
+                        </div>
+                        
+                    </div>
+                    <div class="dice-color blue">
+                        <div class="color-header">
+                            <div class="header-info">
+                                <button class="header-button blue" data-value="5" onclick="Functions.BetDice(5);">5</button>
+                            </div>
+                        </div>
+                        <div class="dice-your-bet">
+                            <div><div class="title"></div><span class="my-bet-red my-bet">x6</span></div>
+                        </div>
+                        
+                    </div>
+                    <div class="dice-color red">
+                        <div class="color-header">
+                            <div class="header-info">
+                                <button class="header-button red" data-value="6" onclick="Functions.BetDice(6);">6</button>
+                            </div>
+                        </div>
+                        <div class="dice-your-bet">
+                            <div><div class="title"></div><span class="my-bet-red my-bet">x6</span></div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="dice-colors">
+                    <div class="dice-color green">
+                        <div class="color-header">
+                            <div class="header-info">
+                                <button class="header-button green" data-value="low" onclick="Functions.BetDice(7);">LOW</button>
+                                <p>от 1 до 3</p>
+                            </div>
+                        </div>
+                        <div class="dice-your-bet">
+                            <div><div class="title"></div><span class="my-bet-red my-bet">x2</span></div>
+                        </div>
+                        
+                    </div>
+                    <div class="dice-color red">
+                    <div class="color-header">
+                        <div class="header-info">
+                            <button class="header-button red" data-value="high" onclick="Functions.BetDice(8);">HIGH</button>
+                            <p>от 4 до 6</p>
+                        </div>
+                    </div>
+                    <div class="dice-your-bet">
+                        <div><div class="title"></div><span class="my-bet-red my-bet">x2</span></div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

@@ -1,0 +1,127 @@
+{% extends "site/pages/layout/layout.twig" %}
+
+{% block content %}
+
+    <div class="case-page">
+        <a href="/" class="btn darkblue backtocases">
+            <span class="flaticon-arrow-left"></span> Другие кейсы
+        </a>
+
+        <div class="spin-won">
+            <h3>Поздравляем!</h3>
+            <h5>Вы выиграли <span id="spin-win-name">1000р</span></h5>
+
+            <h4>
+                <a href="/account/">Перейдите в аккаунт</a>, чтобы получить приз
+            </h4>
+
+            <div class="icon">
+                <img src="/uploads/cases/coin-1000.svg" alt="1000" id="spin-win-icon">
+            </div>
+
+            <div class="button">
+                <input type="button" class="btn rounded blue" value="Выиграть еще" onclick="Functions.ClearAnimation();">
+            </div>
+
+            <div class="c"><a href="/" class="eas">Другие кейсы</a></div>
+            <div class="a-1"></div>
+            <div class="a-2"></div>
+            <div class="a-3"></div>
+            <div class="a-4"></div>
+        </div>
+
+        <div class="spin">
+            <div class="name">
+                <h1>{{ case.name }}</h1>
+                <div class="desc">Содержит от <b>{{ helper.getMinMaxCase(case.id).min }}р</b> до <b>{{ helper.getMinMaxCase(case.id).max }}р</b></div>
+
+                {% if case.type == 2 %}
+                    <div class="digital">
+                        <span>+ {{ helper.getDigitalItemInfo(case.id).name }} {{ helper.getDigitalItemInfo(case.id).cost }}р</span>
+                    </div>
+                {% elseif case.type == 3 %}
+                    <div class="digital">
+                        <span>+ {{ helper.getDigitalItemInfo(case.id).name }}</span>
+                    </div>
+                {% endif %}
+
+                <div class="payed">выдано {{ helper.getBankCase(case.id) }}р</div>
+            </div>
+            <div class="spin-line"></div>
+            <div class="spin-inner">
+                <div class="roulette">
+                    {% for item in items_reverse %}
+                        <img src="{{ helper.getItemInfo(item).image }}" alt="{{ helper.getItemInfo(item).name }}" id="gift-id-{{ helper.getItemInfo(item).id }}">
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="chance">
+                <h3>Увеличитель шанса</h3>
+                <div class="c">
+
+                    <p>
+                    <div class="lcs_wrap">
+                        <input type="checkbox" name="chance" value="{{ ((case.price - case.discount) / 100) * 10 }}" class="lcs_check" data-lcs="1">
+                        <div class="lcs_switch  lcs_off lcs_checkbox_switch">
+                            <div class="lcs_cursor"></div>
+                            <div class="lcs_label lcs_label_on">ВКЛ</div>
+                            <div class="lcs_label lcs_label_off">ВЫКЛ</div>
+                        </div>
+                    </div>
+                    +10% к шансу за <b>{{ ((case.price - case.discount) / 100) * 10 }}р</b>
+                    </p>
+
+                    <p>
+                    <div class="lcs_wrap">
+                        <input type="checkbox" name="chance" value="{{ ((case.price - case.discount) / 100) * 20 }}" class="lcs_check" data-lcs="2">
+                        <div class="lcs_switch  lcs_off lcs_checkbox_switch">
+                            <div class="lcs_cursor"></div>
+                            <div class="lcs_label lcs_label_on">ВКЛ</div>
+                            <div class="lcs_label lcs_label_off">ВЫКЛ</div>
+                        </div>
+                    </div>
+                    +20% к шансу за <b>{{ ((case.price - case.discount)/ 100) * 20 }}р</b>
+                    </p>
+
+                    <p>
+                    <div class="lcs_wrap">
+                        <input type="checkbox" name="chance" value="{{ ((case.price - case.discount) / 100) * 30 }}" class="lcs_check" data-lcs="3">
+                        <div class="lcs_switch  lcs_off lcs_checkbox_switch">
+                            <div class="lcs_cursor"></div>
+                            <div class="lcs_label lcs_label_on">ВКЛ</div>
+                            <div class="lcs_label lcs_label_off">ВЫКЛ</div>
+                        </div>
+                    </div>
+                    +30% к шансу за <b>{{ ((case.price - case.discount) / 100) * 30 }}р</b>
+                    </p>
+
+                </div>
+            </div>
+            <div class="button">
+                <script>
+                    window.spin_chance = 0;
+                    window.spin_amount = {{ case.price - case.discount }};
+                </script>
+                <button class="btn blue rounded" onclick="Functions.OpenCase({{ case.id }}, this);">Открыть кейс за <span><b id="spin-amount">{{ case.price - case.discount }}</b><span class="flaticon-ruble"></span></span></button>
+            </div>
+            <div class="cls"></div>
+        </div>
+
+        <div class="cls"></div>
+
+        <h3 class="title case-page-title">Предметы, которые могут вам выпасть из этого кейса</h3>
+
+        <div class="cls"></div>
+
+        <div class="history-cases MarginTop-40">
+            {% for item in items %}
+                <div class="history-case">
+                    <div class="coin gold">
+                        <img src="{{ helper.getItemInfo(item).image }}" alt="{{ helper.getItemInfo(item).name }}">
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="cls"></div>
+    </div>
+{% endblock %}

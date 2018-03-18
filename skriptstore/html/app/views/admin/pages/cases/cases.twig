@@ -1,0 +1,201 @@
+{% extends "admin/pages/layout/layout.twig" %}
+
+{% block content %}
+    <div class="row">
+    <div class="col-md-12">
+
+    <h2 class="page-title">Кейсы</h2>
+
+    <div class="alert alert-success" style="display: none">
+        <strong>Успешно!</strong> Indicates a successful or positive action.
+    </div>
+
+    <button type="button" class="btn btn-primary" style="margin-bottom: 20px;" data-toggle="modal" data-target="#addCase">Добавить кейс</button>
+    <button type="button" class="btn btn-primary" style="margin-bottom: 20px;" data-toggle="modal" data-target="#addImage">Загрузить картинку</button>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Таблица кейсов</div>
+        <div class="panel-body table-responsive">
+            <table id="zctb" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Позиция</th>
+                    <th>Название</th>
+                    <th>Стоймость</th>
+                    <th>Скидка</th>
+                    <th>Шанс окупаемости</th>
+                    <th>Вещи</th>
+                    <th>Фоновое изображение</th>
+                    <th>Изображение</th>
+                    <th>Тип кейса</th>
+                    <th>Действие</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for case in cases %}
+                    <tr class="case-{{ case.id }}">
+                        <td>{{ case.id }}</td>
+                        <td><div style="display: none">{{ case.position }}</div><input type="text" class="form-control" id="position" value="{{ case.position }}" onchange="Functions.UpdateCasePosition({{ case.id }}, this.value)"></td>
+                        <td><div style="display: none">{{ case.name }}</div><input type="text" class="form-control" id="name" value="{{ case.name }}" onchange="Functions.UpdateCaseName({{ case.id }}, this.value)"></td>
+                        <td>
+                            <div style="display: none">{{ case.price }}</div>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="price" value="{{ case.price }}" onchange="Functions.UpdateCasePrice({{ case.id }}, this.value)">
+                                <span class="input-group-addon" id="basic-addon1"><i class="fa fa-ruble"></i></span>
+                            </div>
+                        </td>
+                        <td>
+                            <div style="display: none">{{ case.discount }}</div>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="discount" value="{{ case.discount }}" onchange="Functions.UpdateCaseDiscount({{ case.id }}, this.value)">
+                                <span class="input-group-addon" id="basic-addon1"><i class="fa fa-ruble"></i></span>
+                            </div>
+                        </td>
+                        <td>
+                            <div style="display: none">{{ case.chance }}</div>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="chance" value="{{ case.chance }}" onchange="Functions.UpdateCaseChance({{ case.id }}, this.value)">
+                                <span class="input-group-addon" id="basic-addon1"><i class="fa fa-percent"></i></span>
+                            </div>
+                        </td>
+                        <td><div style="display: none">{{ case.items }}</div><input type="text" class="form-control" id="items" value="{{ case.items }}" onchange="Functions.UpdateCaseItems({{ case.id }}, this.value)"></td>
+                        <td><img src="{{ case.background_image }}" style="width: 50px;"></td>
+                        <td><img src="{{ case.image }}" style="width: 50px;"></td>
+                        <td>
+                            <div style="display: none">{{ case.type }}</div>
+
+                            <select class="form-control" onchange="Functions.UpdateCaseType({{ case.id }}, this.value)">
+                                <option value="1" {% if case.type == 1 %} selected {% endif %}>Валюта</option>
+                                <option value="2" {% if case.type == 2 %} selected {% endif %}>Гифт</option>
+                                <option value="3" {% if case.type == 3 %} selected {% endif %}>Цифровые вещи</option>
+                            </select>
+                        </td>
+                        <td><button type="button" class="btn btn-danger" onclick="Functions.DeleteCase({{ case.id }})">Удалить</button></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+
+    <!-- Modal Add Item -->
+    <div class="modal fade" id="addCase" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Добавление кейса</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="name">Название</label>
+                        <input type="text" class="form-control" id="name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name">Позиция</label>
+                        <input type="text" class="form-control" id="position">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image">Стоймость</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="price">
+                            <span class="input-group-addon"> <i class="fa fa-ruble"></i></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image">Скидка</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="discount">
+                            <span class="input-group-addon"> <i class="fa fa-ruble"></i></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image">Шанс окупаемости</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="chance">
+                            <span class="input-group-addon"> <i class="fa fa-percent"></i></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image">Вещи</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="items">
+                            <span class="input-group-addon"><b>ID's</b></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image">Изображение</label>
+
+                        <select class="selectpicker" id="image">
+                            {% for image in images %}
+                                <option data-thumbnail="/templates/site/dist/img/cases/{{ image }}" value="/templates/site/dist/img/cases/{{ image }}">{{ image }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image">Фоновое изображение</label>
+
+                        <select class="selectpicker" id="background-image">
+                            {% for image in images %}
+                                <option data-thumbnail="/templates/site/dist/img/cases/{{ image }}" value="/templates/site/dist/img/cases/{{ image }}">{{ image }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image">Тип кейса</label>
+
+                        <select class="form-control" id="type">
+                            <option value="1">Валюта</option>
+                            <option value="2">Гифт</option>
+                            <option value="3">Цифровые вещи</option>
+                        </select>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary" onclick="Functions.AddCase()">Добавить кейс</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Add Image -->
+    <div class="modal fade" id="addImage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Добавление картинки</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="center-block" style="width:200px">
+                            <form action="/api/uploadFile" method="post" enctype="multipart/form-data">
+                                <input type="file" name="filename"><br>
+                                <input type="submit" value="Загрузить" class="center-block"/>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

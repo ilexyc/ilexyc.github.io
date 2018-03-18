@@ -1,0 +1,73 @@
+{% extends "admin/pages/layout/layout.twig" %}
+
+{% block content %}
+    <div class="row">
+    <div class="col-md-12">
+
+    <h2 class="page-title">Цифровые вещи</h2>
+
+    <div class="alert alert-success" style="display: none">
+        <strong>Успешно!</strong> Indicates a successful or positive action.
+    </div>
+
+    <button type="button" class="btn btn-primary" style="margin-bottom: 20px;" data-toggle="modal" data-target="#addDigital">Добавить гифт</button>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Таблица гифтов</div>
+        <div class="panel-body">
+            <table id="zctb" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Название</th>
+                    <th>Код</th>
+                    <th>Зарезервировано</th>
+                    <th>Действие</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for digital in digitals %}
+                    <tr class="digital-{{ digital.id }}">
+                        <td>{{ digital.id }}</td>
+                        <td><div style="display: none">{{ digital.name }}</div><input type="text" class="form-control" id="name" value="{{ digital.name }}" onchange="Functions.UpdateDigitalName({{ digital.id }}, this.value)"></td>
+                        <td><div style="display: none">{{ digital.code }}</div><input type="text" class="form-control" id="code" value="{{ digital.code }}" onchange="Functions.UpdateDigitalCode({{ digital.id }}, this.value)"></td>
+                        <td>{% if digital.reserved %} Да {% else %} Нет {% endif %}</td>
+                        <td><button type="button" class="btn btn-danger" onclick="Functions.DeleteDigital({{ digital.id }})">Удалить</button></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+
+    <!-- Modal Add Item -->
+    <div class="modal fade" id="addDigital" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Добавление гифта</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="name">Название</label>
+                        <input type="text" class="form-control" id="name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image">Код</label>
+                        <input type="text" class="form-control" id="code">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary" onclick="Functions.AddDigital()">Добавить гифт</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
